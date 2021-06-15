@@ -1,0 +1,561 @@
+{
+    "schemes": [
+        "http"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a http server of bytegang sshd.",
+        "title": "ByteGang Sshd",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "EricZhou",
+            "url": "https://mojotv.cn",
+            "email": "neochau@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8022",
+    "basePath": "/",
+    "paths": {
+        "/api/sftp/download/dir": {
+            "get": {
+                "description": "download a dir then return a zip file",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/octet-stream"
+                ],
+                "tags": [
+                    "SFTP"
+                ],
+                "summary": "download a dir",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TOKEN",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "the dir to be downloaded",
+                        "name": "path",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web.responseObj"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sftp/download/file": {
+            "get": {
+                "description": "download a file",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/octet-stream"
+                ],
+                "tags": [
+                    "SFTP"
+                ],
+                "summary": "download a file",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TOKEN",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "a file's path",
+                        "name": "path",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web.responseObj"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sftp/ls": {
+            "get": {
+                "description": "list all items of a directory by sftp",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SFTP"
+                ],
+                "summary": "show all items in a path",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TOKEN",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "the path of a dir",
+                        "name": "dir",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/web.responseObj"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/bastion.ResReadDir"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sftp/mkdir": {
+            "get": {
+                "description": "make a dir",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/octet-stream"
+                ],
+                "tags": [
+                    "SFTP"
+                ],
+                "summary": "make a dir",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TOKEN",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "the path of dir which will be made",
+                        "name": "path",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web.responseObj"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sftp/rm": {
+            "get": {
+                "description": "delete a file or a directory by sftp",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SFTP"
+                ],
+                "summary": "remove a file or a directory",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TOKEN",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "enum": [
+                            "file",
+                            "dir"
+                        ],
+                        "type": "string",
+                        "description": "is a file or dir",
+                        "name": "dir_or_file",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web.responseObj"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sftp/upload": {
+            "post": {
+                "description": "upload an item by SFTP",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SFTP"
+                ],
+                "summary": "upload an item",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TOKEN",
+                        "name": "token",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "the destination dir path",
+                        "name": "dir",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "the file will be uploaded",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web.responseObj"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ssh-exec": {
+            "post": {
+                "description": "test the sshd server is reachable to the addr",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Util"
+                ],
+                "summary": "test the sshd server is reachable to the addr",
+                "parameters": [
+                    {
+                        "description": "ssh connection information and script",
+                        "name": "arg",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/pb.ReqShellExec"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/web.responseObj"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/pb.ResShellExec"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/telnet": {
+            "get": {
+                "description": "test the sshd server is reachable to the addr",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Util"
+                ],
+                "summary": "test the sshd server is reachable to the addr",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "the addr will be connected",
+                        "name": "addr",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web.responseObj"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ws/guacamole": {
+            "get": {
+                "description": "websocket guacamole for RDP/VNC",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Websocket"
+                ],
+                "summary": "websocket guacamole for RDP/VNC",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TOKEN of gRPC to exchange asset's guacamole connection information",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web.responseObj"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ws/ssh": {
+            "get": {
+                "description": "websocket xterm",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Websocket"
+                ],
+                "summary": "websocket xterm",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TOKEN of gRPC to exchange asset's ssh connection information",
+                        "name": "t",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "terminal rows count",
+                        "name": "r",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "terminal columns count",
+                        "name": "c",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web.responseObj"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "bastion.DirItem": {
+            "type": "object",
+            "properties": {
+                "is_dir": {
+                    "type": "boolean"
+                },
+                "mod": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "path": {
+                    "description": "including Name",
+                    "type": "string"
+                },
+                "size": {
+                    "type": "integer"
+                },
+                "time": {
+                    "type": "string"
+                }
+            }
+        },
+        "bastion.ResReadDir": {
+            "type": "object",
+            "properties": {
+                "dir": {
+                    "type": "string"
+                },
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/bastion.DirItem"
+                    }
+                }
+            }
+        },
+        "pb.ReqShellExec": {
+            "type": "object",
+            "properties": {
+                "proxy": {
+                    "$ref": "#/definitions/pb.SshConn"
+                },
+                "shellScript": {
+                    "type": "string"
+                },
+                "target": {
+                    "$ref": "#/definitions/pb.SshConn"
+                },
+                "timeoutConnSec": {
+                    "type": "integer"
+                },
+                "timeoutExecSec": {
+                    "type": "integer"
+                },
+                "uuid": {
+                    "type": "string"
+                }
+            }
+        },
+        "pb.ResShellExec": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "doneAt": {
+                    "type": "integer"
+                },
+                "msg": {
+                    "type": "string"
+                },
+                "ok": {
+                    "type": "boolean"
+                },
+                "output": {
+                    "type": "string"
+                },
+                "startAt": {
+                    "type": "integer"
+                },
+                "uuid": {
+                    "type": "string"
+                }
+            }
+        },
+        "pb.SshConn": {
+            "type": "object",
+            "properties": {
+                "addr": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "privateKey": {
+                    "type": "string"
+                },
+                "privateKeyPassword": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "string"
+                }
+            }
+        },
+        "web.responseObj": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "object"
+                },
+                "msg": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

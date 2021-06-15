@@ -1,0 +1,8 @@
+.idea
+/.run/
+node_modules
+node_modules/*
+static/*
+febuild
+febuild/*
+/docs/docs.go
